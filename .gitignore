@@ -1,0 +1,13 @@
+#Generated files
+/Build
+/Binaries
+/Intermediate
+/Saved
+/DerivedDataCache
+
+#VS or XC generated files or 
+.vs/
+*.suo
+/BuildingEscape.xcworkspace
+BuildingEscape.sln
+
