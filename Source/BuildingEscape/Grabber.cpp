@@ -29,6 +29,7 @@ void UGrabber::BeginPlay()
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	if (Handle == nullptr) { return; }
 	if (Handle->GrabbedComponent) {
 		Handle->SetTargetLocation(PlayerLineTraceEnd());
 	}
@@ -36,7 +37,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 }
 //Find the attached Physics Handler
 void UGrabber::FindPhysicsHandleComponent() {
-
 	Handle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 	if (Handle == nullptr) {
 		UE_LOG(LogTemp, Error, TEXT("%s missing physics handle component"), *(GetOwner()->GetName()))
@@ -83,14 +83,17 @@ FHitResult UGrabber::GetFirstPhysicsBodyInReach()  {
 
 void UGrabber::Grab()
 {
+	if (Handle == nullptr) { return; }
 	auto HitInfo = GetFirstPhysicsBodyInReach();
 	auto ComponentToGrab = HitInfo.GetComponent();
 	auto ActorHit = HitInfo.GetActor();
-	Handle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
-
+	if (ActorHit != nullptr) {
+		Handle->GrabComponent(ComponentToGrab, NAME_None, ComponentToGrab->GetOwner()->GetActorLocation(), true);
+	}
 }
 
 void UGrabber::Release() {
+	if (Handle == nullptr) { return; }
 	Handle->ReleaseComponent();
 }
 
